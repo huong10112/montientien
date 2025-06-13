@@ -1,0 +1,70 @@
+-- Tạo database
+CREATE DATABASE shop_my_pham;
+
+-- Bảng người dùng
+CREATE TABLE nguoi_dung (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    ten_dang_nhap VARCHAR(50) NOT NULL UNIQUE,
+    mat_khau VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    ho_ten NVARCHAR(100),
+    dia_chi NVARCHAR(MAX),
+    so_dien_thoai VARCHAR(20),
+    ngay_tao DATETIME DEFAULT GETDATE()
+);
+
+
+-- Bảng sản phẩm
+CREATE TABLE san_pham (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    ten_san_pham NVARCHAR(100) NOT NULL,
+    mo_ta NVARCHAR(MAX),
+    gia DECIMAL(10,2) NOT NULL,
+    danh_muc NVARCHAR(50),
+    so_luong_ton_kho INT NOT NULL,
+    ngay_tao DATETIME DEFAULT GETDATE()
+);
+
+
+-- Bảng bình luận
+CREATE TABLE binh_luan (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    id_nguoi_dung INT NOT NULL,
+    id_san_pham INT NOT NULL,
+    noi_dung NVARCHAR(MAX) NOT NULL,
+    danh_gia INT,
+    ngay_tao DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (id_nguoi_dung) REFERENCES nguoi_dung(id),
+    FOREIGN KEY (id_san_pham) REFERENCES san_pham(id)
+);
+
+-- Thêm dữ liệu người dùng
+INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau, email, ho_ten, dia_chi, so_dien_thoai) VALUES
+('nguyenvanA', 'matkhau123', 'nguyenvana@gmail.com', N'Nguyễn Văn A', N'123 Đường Lê Lợi, Q.1, TP.HCM', '0901234567'),
+('tranthiB', 'matkhau456', 'tranthib@gmail.com', N'Trần Thị B', N'456 Đường Nguyễn Huệ, Q.1, TP.HCM', '0912345678'),
+('lethic', 'matkhau789', 'lethic@gmail.com', N'Lê Thị C', N'789 Đường Cách Mạng Tháng 8, Q.3, TP.HCM', '0923456789'),
+('phamvand', 'matkhau101', 'phamvand@gmail.com', N'Phạm Văn D', N'101 Đường 3/2, Q.10, TP.HCM', '0934567890'),
+('hoangthie', 'matkhau112', 'hoangthie@gmail.com', N'Hoàng Thị E', N'112 Đường Lý Thường Kiệt, Q.11, TP.HCM', '0945678901'),
+('vuvanf', 'matkhau131', 'vuvanf@gmail.com', N'Vũ Văn F', N'131 Đường Lê Văn Sỹ, Q.3, TP.HCM', '0956789012');
+
+
+-- Thêm dữ liệu sản phẩm
+INSERT INTO san_pham (ten_san_pham, mo_ta, gia, danh_muc, so_luong_ton_kho) VALUES
+(N'Kem dưỡng ẩm', N'Kem dưỡng ẩm da mặt chiết xuất từ nha đam', 250000, N'Chăm sóc da', 50),
+(N'Son môi lì', N'Son môi lì không trôi màu 12 giờ', 180000, N'Trang điểm', 100),
+(N'Tẩy trang', N'Nước tẩy trang dịu nhẹ cho mọi loại da', 120000, N'Chăm sóc da', 80),
+(N'Mascara', N'Mascara làm dày và dài mi', 150000, N'Trang điểm', 60),
+(N'Sữa rửa mặt', N'Sữa rửa mặt trị mụn cho da dầu', 95000, N'Chăm sóc da', 120),
+(N'Phấn mắt', N'Bảng phấn mắt 12 màu thời thượng', 320000, N'Trang điểm', 40);
+
+
+-- Thêm dữ liệu bình luận
+INSERT INTO binh_luan (id_nguoi_dung, id_san_pham, noi_dung, danh_gia) VALUES
+(1, 1, N'Kem dưỡng rất tốt, da mình mềm mịn hẳn sau 1 tuần sử dụng', 5),
+(2, 1, N'Mùi hương dễ chịu, nhưng hơi nhờn một chút', 4),
+(3, 2, N'Son lì đẹp, màu chuẩn như hình, giữ màu cả ngày', 5),
+(4, 3, N'Tẩy trang sạch nhưng hơi khô da', 3),
+(5, 4, N'Mascara này làm mi dày và cong đẹp tự nhiên', 5),
+(6, 5, N'Sữa rửa mặt trị mụn hiệu quả, giá cả hợp lý', 4);
+
+select * from san_pham
